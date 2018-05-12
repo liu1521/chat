@@ -9,7 +9,7 @@ import java.io.PipedOutputStream;
 
 /**
  * Create by : liu
- * Create on : 2018/5/3
+ * Create on : 2018/5/12
  * Create for : 监听收到的消息
  */
 
@@ -61,6 +61,9 @@ public class ReceiveThread implements Runnable {
                         case "addFriend":      //格式:"addFriend,result"
                             addFriend();
                             break;
+                        case "offline" :       //格式:"offline,receiverId"
+                            isOffline();
+                            break;
                         case "joinChatRoom":
                             joinChatRoom();     //格式:"joinChatRoom,roomName,enterName"
                             break;
@@ -78,7 +81,7 @@ public class ReceiveThread implements Runnable {
     public void personalMsg() {
         String senderName = strings[1];
         String senderId = strings[2];
-        String msg = string.substring(senderName.length() + operate.length() + 2);
+        String msg = string.substring(senderName.length() + senderId.length() + operate.length() + 3);
         boolean isExist = false; //判断相应对话框是否存在，如果存在则之间显示消息到对应对话框，否则新建一个对话框
         for (Dialog dialog : user.getDialogs()) {
             if (senderId.equals(dialog.getId())) {
@@ -142,6 +145,16 @@ public class ReceiveThread implements Runnable {
             if (chatRoom.getRoomName().equals(roomName)) {
                 chatRoom.getInformation().append("\t" + outerName + "退出了聊天室\n");
                 chatRoom.getInformation().setCaretPosition(chatRoom.getInformation().getText().length());
+            }
+        }
+    }
+
+    public void isOffline() {
+        String receiverID = string.substring(operate.length() + 1);
+        for (Dialog d:user.getDialogs()) {
+            if (receiverID.equals(d.getId())) {
+                d.getInformation().append("\t对方不在线,消息没能送达\n");
+                d.getInformation().setCaretPosition(d.getInformation().getText().length());
             }
         }
     }

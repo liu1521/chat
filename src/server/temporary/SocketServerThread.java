@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * Create by : liu
- * Create on : 2018/5/3
+ * Create on : 2018/5/12
  * Create for : 服务器接收请求并回应
  */
 
@@ -90,6 +90,7 @@ public class SocketServerThread extends Thread {
     }
 
     public void sendMsg() {
+        boolean isOnline = false;
         String senderName = strings[1];
         String senderId = strings[2];
         String receiverId = strings[3];
@@ -99,7 +100,13 @@ public class SocketServerThread extends Thread {
                 PrintWriter pw = entry.getValue().getPw();
                 pw.println("personalMsg," + senderName + "," + senderId + "," + msg);
                 pw.flush();
+                isOnline = true;
+                break;
             }
+        }
+        if (!isOnline) {
+            online.getPw().println("offline," + receiverId);
+            online.getPw().flush();
         }
     }
 

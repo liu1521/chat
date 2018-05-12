@@ -8,7 +8,7 @@ import java.awt.event.*;
 
 /**
  * Create by : liu
- * Create on : 2018/4/27
+ * Create on : 2018/5/12
  * Create for : 聊天对话框
  */
 
@@ -62,10 +62,10 @@ public class Dialog {
             public void actionPerformed(ActionEvent e) {
                 String msg = inputBox.getText();
                 if ("".equals(msg)) return;
-                user.send(id, msg);
                 information.append("  " + user.getUsername() + ":\n" + msg + "\n");
                 information.setCaretPosition(information.getText().length());
                 inputBox.setText("");
+                user.send(id, msg);
             }
         });
 
@@ -77,7 +77,7 @@ public class Dialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                user.getDialogs().remove(this);
+                user.getDialogs().remove(Dialog.this);
             }
         });
         jFrame.add(info, BorderLayout.NORTH);

@@ -41,7 +41,7 @@ public class JoinChatRoom {
         jFrame = new JFrame();
         jFrame.add(roomNameField, BorderLayout.NORTH);
         jFrame.add(join, BorderLayout.SOUTH);
-        jFrame.setSize(250, 100);
+        jFrame.setSize(380, 100);
         jFrame.setLocation(450, 350);
     }
 
