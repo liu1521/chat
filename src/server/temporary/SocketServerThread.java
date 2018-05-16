@@ -41,6 +41,11 @@ public class SocketServerThread extends Thread {
                 len = is.read(bytes);
                 if (len <= 0) continue;
                 request = new String(bytes, 0, len - 1);   //末尾有个'\n',len-1去掉这个换行符
+                /*
+                * 登陆拉取好友列表的时候我自己的电脑发过来的末尾只有一个\n
+                * 但我用室友的电脑登陆拉取好友的时候发过来末尾是\r\n
+                * */
+
                 strings = request.split(",");
                 operate = strings[0];
                 switch (operate) {
@@ -78,8 +83,9 @@ public class SocketServerThread extends Thread {
     }
 
     public void getFriends() {
-        String id = strings[1];
-        String friends = link.getFriends(Integer.parseInt(id.replace("\n", "")));
+        String id = request.substring(operate.length()+1).replace("\r", "");
+        System.out.println(id + "1");
+        String friends = link.getFriends(Integer.parseInt(id));
         if (friends.equals("")) {
             online.getPw().println("null");      //如果为空,返回null
             online.getPw().flush();
